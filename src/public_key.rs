@@ -36,9 +36,7 @@ pub struct PublicKey {
 
 impl PartialEq for PublicKey {
     fn eq(&self, other: &Self) -> bool {
-        let self_bytes = self.to_vec();
-        let other_bytes = other.to_vec();
-        self_bytes == other_bytes
+        self.network == other.network && self.inner == other.inner
     }
 }
 
