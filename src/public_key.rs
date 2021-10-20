@@ -3,7 +3,10 @@
 //! since a client will need to be able to parse and use a public key from any
 //! keypair.
 use crate::*;
-use std::convert::TryFrom;
+use std::{
+    convert::TryFrom,
+    hash::{Hash, Hasher},
+};
 
 ///Verify a given message against a given signature slice. Public keys are
 ///expected to implemt this trait to verify signed messages.
@@ -24,11 +27,26 @@ pub trait PublicKeySize {
 /// network.
 ///
 /// Public keys can convert to and from their binary and base58 representation
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, Clone)]
 pub struct PublicKey {
     /// The network this public key is valid for
     pub network: Network,
     inner: PublicKeyRepr,
+}
+
+impl PartialEq for PublicKey {
+    fn eq(&self, other: &Self) -> bool {
+        let self_bytes = self.to_vec();
+        let other_bytes = other.to_vec();
+        self_bytes == other_bytes
+    }
+}
+
+impl Hash for PublicKey {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        let bytes = self.to_vec();
+        state.write(&bytes);
+    }
 }
 
 /// Holds the actual representation of all supported public key types.
