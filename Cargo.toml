@@ -17,7 +17,6 @@ ecc608-linux-swi = { git = "https://github.com/TektelicCommunications/ecc608-lin
 ecc608-linux = { version = "0", optional = true }
 
 [features]
-default = [ "ecc608" ]
 ecc608 = [ "ecc608-linux" ]
 ecc608-swi = [ "ecc608-linux-swi" ]
 
