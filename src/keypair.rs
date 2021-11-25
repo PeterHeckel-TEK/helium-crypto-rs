@@ -13,7 +13,7 @@ pub trait Sign {
 pub enum Keypair {
     Ed25519(ed25519::Keypair),
     EccCompact(ecc_compact::Keypair),
-    #[cfg(feature = "ecc608")]
+    #[cfg(any(feature = "ecc608", feature = "ecc608-swi"))]
     Ecc608(ecc608::Keypair),
 }
 
@@ -24,7 +24,7 @@ impl Sign for Keypair {
         match self {
             Self::Ed25519(keypair) => keypair.sign(msg),
             Self::EccCompact(keypair) => keypair.sign(msg),
-            #[cfg(feature = "ecc608")]
+            #[cfg(any(feature = "ecc608", feature = "ecc608-swi"))]
             Self::Ecc608(keypair) => keypair.sign(msg),
         }
     }
@@ -59,7 +59,7 @@ impl Keypair {
         match self {
             Self::Ed25519(keypair) => keypair.key_tag(),
             Self::EccCompact(keypair) => keypair.key_tag(),
-            #[cfg(feature = "ecc608")]
+            #[cfg(any(feature = "ecc608", feature = "ecc608-swi"))]
             Self::Ecc608(keypair) => keypair.key_tag(),
         }
     }
@@ -68,7 +68,7 @@ impl Keypair {
         match self {
             Self::Ed25519(keypair) => &keypair.public_key,
             Self::EccCompact(keypair) => &keypair.public_key,
-            #[cfg(feature = "ecc608")]
+            #[cfg(any(feature = "ecc608", feature = "ecc608-swi"))]
             Self::Ecc608(keypair) => &keypair.public_key,
         }
     }
@@ -76,7 +76,7 @@ impl Keypair {
     pub fn ecdh(&self, public_key: &PublicKey) -> Result<SharedSecret> {
         match self {
             Self::EccCompact(keypair) => Ok(SharedSecret(keypair.ecdh(public_key)?)),
-            #[cfg(feature = "ecc608")]
+            #[cfg(any(feature = "ecc608", feature = "ecc608-swi"))]
             Self::Ecc608(keypair) => Ok(SharedSecret(keypair.ecdh(public_key)?)),
             _ => Err(Error::invalid_curve()),
         }
@@ -86,7 +86,7 @@ impl Keypair {
         match self {
             Self::Ed25519(keypair) => keypair.to_vec(),
             Self::EccCompact(keypair) => keypair.to_vec(),
-            #[cfg(feature = "ecc608")]
+            #[cfg(any(feature = "ecc608", feature = "ecc608-swi"))]
             Self::Ecc608(_) => panic!("not supported"),
         }
     }
@@ -95,7 +95,7 @@ impl Keypair {
         match self {
             Self::Ed25519(keypair) => keypair.secret_to_vec(),
             Self::EccCompact(keypair) => keypair.secret_to_vec(),
-            #[cfg(feature = "ecc608")]
+            #[cfg(any(feature = "ecc608", feature = "ecc608-swi"))]
             Self::Ecc608(_) => panic!("not supported"),
         }
     }
@@ -113,7 +113,7 @@ impl From<ecc_compact::Keypair> for Keypair {
     }
 }
 
-#[cfg(feature = "ecc608")]
+#[cfg(any(feature = "ecc608", feature = "ecc608-swi"))]
 impl From<ecc608::Keypair> for Keypair {
     fn from(keypair: ecc608::Keypair) -> Self {
         Self::Ecc608(keypair)

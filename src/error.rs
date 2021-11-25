@@ -16,6 +16,11 @@ pub enum Error {
     #[cfg_attr(docsrs, doc(cfg(feature = "ecc608")))]
     #[error("ecc608 error")]
     Ecc608(#[from] ecc608_linux::Error),
+
+    #[cfg(feature = "ecc608-swi")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "ecc608-swi")))]
+    #[error("ecc608 error")]
+    Ecc608(#[from] ecc608_linux_swi::Error),
 }
 
 #[derive(Error, Debug)]

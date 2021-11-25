@@ -24,7 +24,7 @@
 pub mod ecc_compact;
 pub mod ed25519;
 
-#[cfg(feature = "ecc608")]
+#[cfg(any(feature = "ecc608", feature = "ecc608-swi"))]
 pub mod ecc608;
 
 pub mod error;

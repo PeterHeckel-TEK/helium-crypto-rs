@@ -2,7 +2,14 @@ use crate::{
     ecc_compact::{self, Signature},
     keypair, public_key, Error, KeyTag, KeyType as CrateKeyType, Network, Result,
 };
+#[cfg(feature = "ecc608")]
 pub use ecc608_linux::{Ecc, KeyConfig, KeyType, SlotConfig, Zone, MAX_SLOT};
+#[cfg(feature = "ecc608-swi")]
+pub use ecc608_linux_swi::{Ecc, KeyConfig, KeyType, SlotConfig, Zone, MAX_SLOT};
+
+#[cfg(all(feature = "ecc608", feature = "ecc608-swi"))]
+compile_error!("feature \"ecc608\" and feature \"ecc608-swi\" cannot be enabled at the same time, pick a single interface");
+
 use p256::{ecdsa, elliptic_curve};
 use std::{
     convert::{TryFrom, TryInto},
@@ -45,7 +52,10 @@ pub fn init(path: &str, address: u16) -> Result {
     if INIT.is_completed() {
         return Ok(());
     }
+    #[cfg(feature = "ecc608")]
     let ecc = ecc608_linux::Ecc::from_path(path, address)?;
+    #[cfg(feature = "ecc608-swi")]
+    let ecc = ecc608_linux_swi::Ecc::from_path(path, address)?;
     unsafe {
         INIT.call_once(|| ECC = Some(Mutex::new(ecc)));
     }
