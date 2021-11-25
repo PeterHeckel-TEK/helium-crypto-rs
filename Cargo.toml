@@ -13,11 +13,13 @@ serde = "1"
 rand_core = { version = "0.6", features = ["getrandom"] }
 ed25519-dalek = { git = "https://github.com/helium/ed25519-dalek", branch = "madninja/bump_rand" }
 p256 = { git = "https://github.com/helium/elliptic-curves", branch="madninja/compact_point_impl", default-features=false, features=["arithmetic", "ecdsa", "sha256", "zeroize", "ecdh"] }
-ecc608-linux = { git = "https://github.com/PeterHeckel-TEK/ecc608-linux-rs", rev = "9cc654fde8f16042d169509cbe2ebba10f2e27ef", optional = true}
+ecc608-linux-swi = { git = "https://github.com/TektelicCommunications/ecc608-linux-swi-rs", rev = "b8d38ba497b52110bf37b0b2fdf4f3446e54e05f", optional = true}
+ecc608-linux = { version = "0", optional = true }
 
 [features]
-default = []
+default = [ "ecc608" ]
 ecc608 = [ "ecc608-linux" ]
+ecc608-swi = [ "ecc608-linux-swi" ]
 
 [dev-dependencies]
 hex = "0"
