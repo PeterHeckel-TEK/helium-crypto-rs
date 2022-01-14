@@ -1,6 +1,6 @@
 [package]
 name = "helium-crypto"
-version = "0.3.2-dev"
+version = "0.3.3-dev"
 authors = ["Marc Nijdam <marc@helium.com>"]
 edition = "2018"
 license = "Apache-2.0"
@@ -12,8 +12,8 @@ signature = "*"
 serde = "1"
 rand_core = { version = "0.6", features = ["getrandom"] }
 ed25519-dalek = { git = "https://github.com/helium/ed25519-dalek", branch = "madninja/bump_rand" }
-p256 = { git = "https://github.com/helium/elliptic-curves", branch="madninja/compact_point_impl", default-features=false, features=["arithmetic", "ecdsa", "sha256", "zeroize", "ecdh"] }
-ecc608-linux = { git = "https://github.com/PeterHeckel-TEK/ecc608-linux-rs", rev = "9cc654fde8f16042d169509cbe2ebba10f2e27ef", optional = true}
+p256 = { version="0.10.0", default-features=false, features=["arithmetic", "ecdsa", "sha256", "ecdh"] }
+ecc608-linux = { git = "https://github.com/TektelicCommunications/ecc608-linux-swi-rs", branch = "feature/runtime-interface-selection" , optional = true}
 
 [features]
 default = []
@@ -22,7 +22,7 @@ ecc608 = [ "ecc608-linux" ]
 [dev-dependencies]
 hex = "0"
 hex-literal = "0"
-rand = "0.8"
-sha2 = "0"
+rand = "*"
+sha2 = "*"
 
 
